@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartDress – Votre garde-robe intelligente</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --tan: #CFBB99;
+    --bone: #E5D7C4;
+    --moss: #889063;
+    --deep-tan: #B8A07E;
+    --cream: #F5EEE4;
+    --bark: #5C4A35;
+    --white: #FDFAF6;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--bark); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 60px;
+    background: rgba(253,250,246,0.9);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(207,187,153,0.3);
+  }
+  .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-weight: 600; letter-spacing: 0.04em; color: var(--bark); text-decoration: none; }
+  .logo span { color: var(--moss); font-style: italic; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-size: 0.82rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--bark); text-decoration: none; opacity: 0.65; transition: opacity 0.2s; }
+  .nav-links a:hover { opacity: 1; }
+  .nav-cta { background: var(--bark); color: var(--cream); border: none; padding: 11px 28px; border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.25s; }
+  .nav-cta:hover { background: var(--moss); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; overflow: hidden; }
+
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 80px 60px 160px 80px; position: relative; }
+
+  .hero-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--moss); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; animation: fadeUp 0.7s ease 0.1s both; }
+  .hero-label::before { content: ''; display: block; width: 32px; height: 1px; background: var(--moss); }
+
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 4.5vw, 5.5rem); font-weight: 300; line-height: 1.05; color: var(--bark); margin-bottom: 28px; animation: fadeUp 0.7s ease 0.25s both; }
+  .hero-title em { font-style: italic; color: var(--moss); font-weight: 400; }
+
+  .hero-subtitle { font-size: 0.95rem; font-weight: 300; line-height: 1.8; color: var(--bark); opacity: 0.65; max-width: 400px; margin-bottom: 48px; animation: fadeUp 0.7s ease 0.4s both; }
+
+  .hero-actions { display: flex; gap: 16px; align-items: center; animation: fadeUp 0.7s ease 0.55s both; }
+
+  .btn-primary { background: var(--moss); color: var(--white); border: none; padding: 15px 36px; border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block; }
+  .btn-primary:hover { background: var(--bark); transform: translateY(-2px); }
+
+  .btn-ghost { background: transparent; color: var(--bark); border: 1px solid rgba(92,74,53,0.3); padding: 15px 30px; border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block; }
+  .btn-ghost:hover { border-color: var(--bark); background: rgba(92,74,53,0.05); }
+
+  .hero-stats { position: absolute; bottom: 60px; left: 80px; display: flex; gap: 48px; animation: fadeUp 0.7s ease 0.7s both; }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 600; color: var(--bark); line-height: 1; }
+  .stat-label { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--bark); opacity: 0.45; margin-top: 4px; }
+
+  /* HERO RIGHT */
+  .hero-right { background: var(--bone); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .hero-right::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 30%, rgba(136,144,99,0.18) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(207,187,153,0.3) 0%, transparent 55%); }
+
+  .wardrobe-visual { position: relative; z-index: 1; width: 340px; height: 480px; }
+
+  .rail { position: absolute; top: 54px; left: 20px; right: 20px; height: 4px; background: var(--bark); border-radius: 2px; }
+  .rail::before, .rail::after { content: ''; position: absolute; top: -22px; width: 2px; height: 26px; background: var(--bark); }
+  .rail::before { left: 20px; }
+  .rail::after { right: 20px; }
+
+  .hanger { position: absolute; top: 30px; display: flex; flex-direction: column; align-items: center; }
+  .hanger-hook { width: 2px; height: 20px; background: var(--deep-tan); }
+  .hanger-bar { width: 60px; height: 2px; background: var(--deep-tan); position: relative; }
+  .hanger-bar::before, .hanger-bar::after { content: ''; position: absolute; top: 0; width: 2px; height: 12px; background: var(--deep-tan); }
+  .hanger-bar::before { left: 0; transform: rotate(20deg); transform-origin: top; }
+  .hanger-bar::after { right: 0; transform: rotate(-20deg); transform-origin: top; }
+  .garment { margin-top: -2px; border-radius: 0 0 8px 8px; }
+
+  .suggest-card { position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); background: var(--white); border-radius: 12px; padding: 18px 22px; width: 270px; box-shadow: 0 20px 60px rgba(92,74,53,0.18); display: flex; gap: 14px; align-items: center; animation: float 4s ease-in-out infinite; }
+  .suggest-icon { width: 42px; height: 42px; border-radius: 10px; background: var(--moss); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .st-label { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--moss); font-weight: 500; }
+  .st-title { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--bark); font-weight: 600; margin-top: 2px; }
+  .st-weather { font-size: 0.75rem; color: var(--bark); opacity: 0.5; margin-top: 2px; }
+
+  .weather-badge { position: absolute; top: 80px; right: 24px; background: var(--white); border-radius: 10px; padding: 12px 18px; box-shadow: 0 8px 24px rgba(92,74,53,0.12); text-align: center; animation: floatBadge 3.5s ease-in-out 0.5s infinite; }
+  .weather-badge .temp { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 600; color: var(--bark); line-height: 1; }
+  .weather-badge .wlabel { font-size: 0.68rem; letter-spacing: 0.1em; color: var(--bark); opacity: 0.5; text-transform: uppercase; }
+
+  /* FEATURES */
+  .section-features { padding: 120px 80px; background: var(--white); }
+  .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 72px; }
+  .section-tag { font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--moss); font-weight: 500; display: flex; align-items: center; gap: 12px; }
+  .section-tag::before { content: ''; width: 32px; height: 1px; background: var(--moss); }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 3.5vw, 3.5rem); font-weight: 300; line-height: 1.1; color: var(--bark); max-width: 460px; margin-top: 14px; }
+  .section-title em { font-style: italic; color: var(--moss); }
+  .section-desc { font-size: 0.9rem; line-height: 1.8; color: var(--bark); opacity: 0.55; max-width: 280px; text-align: right; }
+
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .feature-card { background: var(--cream); padding: 48px 40px; position: relative; overflow: hidden; transition: background 0.3s; }
+  .feature-card:hover { background: var(--bone); }
+  .feature-card:nth-child(2) { background: var(--bone); }
+  .feature-card:nth-child(2):hover { background: var(--tan); }
+  .fc-number { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 300; color: rgba(207,187,153,0.6); line-height: 1; position: absolute; top: 28px; right: 32px; }
+  .fc-icon { font-size: 2rem; margin-bottom: 24px; }
+  .fc-title { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 600; color: var(--bark); margin-bottom: 14px; }
+  .fc-desc { font-size: 0.85rem; line-height: 1.75; color: var(--bark); opacity: 0.6; }
+
+  /* HOW IT WORKS */
+  .section-how { padding: 120px 80px; background: var(--bark); color: var(--cream); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .how-left .section-tag { color: var(--tan); }
+  .how-left .section-tag::before { background: var(--tan); }
+  .how-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 3vw, 3.5rem); font-weight: 300; line-height: 1.1; color: var(--cream); margin: 20px 0 32px; }
+  .how-title em { font-style: italic; color: var(--tan); }
+  .how-desc { font-size: 0.9rem; line-height: 1.8; color: var(--cream); opacity: 0.55; margin-bottom: 40px; }
+
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 20px; align-items: flex-start; padding: 22px 0; border-bottom: 1px solid rgba(229,215,196,0.1); }
+  .step-num { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; color: var(--tan); line-height: 1; min-width: 32px; }
+  .step-title { font-size: 0.9rem; font-weight: 500; color: var(--cream); margin-bottom: 4px; }
+  .step-desc { font-size: 0.82rem; color: var(--cream); opacity: 0.45; line-height: 1.6; }
+
+  /* Phone */
+  .how-right { display: flex; justify-content: center; align-items: center; }
+  .phone-frame { width: 260px; height: 530px; background: var(--cream); border-radius: 38px; position: relative; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.45), 0 0 0 1px rgba(229,215,196,0.2); }
+  .phone-status { height: 36px; background: var(--bone); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; font-size: 0.65rem; color: var(--bark); opacity: 0.7; font-weight: 500; }
+  .phone-header { padding: 14px 20px 12px; background: var(--bone); border-bottom: 1px solid rgba(207,187,153,0.3); }
+  .ph-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--bark); font-weight: 600; }
+  .ph-date { font-size: 0.65rem; color: var(--bark); opacity: 0.45; margin-top: 2px; }
+  .phone-weather-bar { margin: 12px 16px; background: var(--moss); border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; color: var(--white); }
+  .pwb-temp { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; }
+  .pwb-label { font-size: 0.6rem; opacity: 0.8; }
+  .pwb-icon { font-size: 1.6rem; }
+  .outfit-suggestion { margin: 0 16px 10px; background: var(--white); border-radius: 10px; padding: 12px 14px; }
+  .os-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--moss); font-weight: 500; }
+  .os-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--bark); font-weight: 600; margin-top: 2px; }
+  .outfit-items { margin: 0 16px 10px; display: flex; gap: 8px; }
+  .oi { flex: 1; height: 70px; border-radius: 8px; }
+  .oi-1 { background: var(--moss); opacity: 0.8; }
+  .oi-2 { background: var(--bark); opacity: 0.65; }
+  .oi-3 { background: var(--tan); }
+  .wardrobe-grid-phone { margin: 0 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .wgp-item { border-radius: 8px; padding: 10px 12px; font-size: 0.65rem; color: var(--bark); font-weight: 500; }
+  .wgp-item:nth-child(odd) { background: var(--bone); }
+  .wgp-item:nth-child(even) { background: var(--cream); border: 1px solid var(--tan); }
+  .wgp-num { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--bark); display: block; }
+
+  /* CTA */
+  .section-cta { padding: 120px 80px; background: var(--bone); text-align: center; position: relative; overflow: hidden; }
+  .section-cta::before { content: '"'; position: absolute; top: -30px; left: 40px; font-family: 'Cormorant Garamond', serif; font-size: 22rem; color: var(--tan); opacity: 0.2; line-height: 1; pointer-events: none; }
+  .cta-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 4vw, 4.5rem); font-weight: 300; line-height: 1.1; color: var(--bark); max-width: 700px; margin: 20px auto 24px; }
+  .cta-title em { font-style: italic; color: var(--moss); }
+  .cta-desc { font-size: 0.9rem; line-height: 1.8; color: var(--bark); opacity: 0.6; max-width: 480px; margin: 0 auto 48px; }
+  .cta-actions { display: flex; justify-content: center; gap: 16px; position: relative; z-index: 1; }
+
+  /* FOOTER */
+  footer { padding: 64px 80px 40px; background: var(--bark); color: var(--cream); display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; }
+  .footer-brand .logo { color: var(--cream); }
+  .footer-brand .logo span { color: var(--tan); }
+  .footer-tagline { font-size: 0.82rem; line-height: 1.7; color: var(--cream); opacity: 0.45; margin-top: 16px; max-width: 240px; }
+  .footer-col h4 { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--tan); font-weight: 500; margin-bottom: 20px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul li a { font-size: 0.85rem; color: var(--cream); opacity: 0.45; text-decoration: none; transition: opacity 0.2s; }
+  .footer-col ul li a:hover { opacity: 1; }
+  .footer-bottom { padding: 22px 80px; background: var(--bark); color: var(--cream); border-top: 1px solid rgba(229,215,196,0.1); display: flex; justify-content: space-between; font-size: 0.75rem; opacity: 0.35; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes float { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-10px); } }
+  @keyframes floatBadge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  /* RESPONSIVE */
+  @media (max-width: 960px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { min-height: 380px; }
+    .hero-left { padding: 48px 24px 120px; }
+    .hero-stats { left: 24px; bottom: 24px; gap: 28px; }
+    .section-features, .section-cta { padding: 72px 24px; }
+    .section-how { padding: 72px 24px; grid-template-columns: 1fr; }
+    .how-right { display: none; }
+    .section-header { flex-direction: column; gap: 20px; }
+    .section-desc { text-align: left; }
+    .features-grid { grid-template-columns: 1fr; gap: 2px; }
+    footer { grid-template-columns: 1fr 1fr; padding: 48px 24px 32px; gap: 32px; }
+    .footer-bottom { padding: 18px 24px; flex-direction: column; gap: 6px; }
+    .cta-title { font-size: 2.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">Smart<span>Dress</span></a>
+  <ul class="nav-links">
+    <li><a href="#">Fonctionnalités</a></li>
+    <li><a href="#">Comment ça marche</a></li>
+    <li><a href="#">Garde-robe</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <button class="nav-cta">Commencer</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <span class="hero-label">Votre stylist personnel · IA &amp; Météo</span>
+    <h1 class="hero-title">
+      S'habiller<br>avec <em>intelligence</em><br>chaque matin.
+    </h1>
+    <p class="hero-subtitle">SmartDress organise votre garde-robe digitale et vous suggère des tenues adaptées à la météo et à vos préférences — pour ne plus jamais perdre de temps devant votre armoire.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Essayer gratuitement</a>
+      <a href="#" class="btn-ghost">Voir la démo</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">2min</div><div class="stat-label">Gagnées / matin</div></div>
+      <div><div class="stat-num">100%</div><div class="stat-label">Adapté météo</div></div>
+      <div><div class="stat-num">∞</div><div class="stat-label">Combinaisons</div></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="wardrobe-visual">
+      <div class="rail"></div>
+
+      <div class="hanger" style="left:30px">
+        <div class="hanger-hook"></div>
+        <div class="hanger-bar"></div>
+        <div class="garment" style="width:58px;height:92px;background:var(--moss);opacity:0.85;"></div>
+      </div>
+      <div class="hanger" style="left:102px">
+        <div class="hanger-hook"></div>
+        <div class="hanger-bar"></div>
+        <div class="garment" style="width:58px;height:115px;background:var(--tan);"></div>
+      </div>
+      <div class="hanger" style="left:174px">
+        <div class="hanger-hook"></div>
+        <div class="hanger-bar"></div>
+        <div class="garment" style="width:58px;height:78px;background:var(--bark);opacity:0.65;"></div>
+      </div>
+      <div class="hanger" style="left:246px">
+        <div class="hanger-hook"></div>
+        <div class="hanger-bar"></div>
+        <div class="garment" style="width:58px;height:98px;background:var(--deep-tan);"></div>
+      </div>
+
+      <div class="suggest-card">
+        <div class="suggest-icon">✨</div>
+        <div>
+          <div class="st-label">Suggestion du jour</div>
+          <div class="st-title">Casual Chic · Automne</div>
+          <div class="st-weather">☁ 18°C · Légèrement nuageux</div>
+        </div>
+      </div>
+
+      <div class="weather-badge">
+        <div class="temp">18°</div>
+        <div class="wlabel">Casablanca</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-features">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Fonctionnalités</div>
+      <h2 class="section-title">Tout ce dont vous avez <em>besoin</em></h2>
+    </div>
+    <p class="section-desc">Une application pensée pour simplifier votre quotidien vestimentaire, de A à Z.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="fc-number">01</div>
+      <div class="fc-icon">👗</div>
+      <div class="fc-title">Garde-robe digitale</div>
+      <p class="fc-desc">Numérisez et organisez tous vos vêtements par catégorie, couleur et saison. Visualisez ce que vous possédez vraiment.</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-number">02</div>
+      <div class="fc-icon">🌤️</div>
+      <div class="fc-title">Suggestions météo</div>
+      <p class="fc-desc">L'application analyse la météo en temps réel et vous suggère les tenues les plus adaptées à la température du jour.</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-number">03</div>
+      <div class="fc-icon">✨</div>
+      <div class="fc-title">IA de style</div>
+      <p class="fc-desc">Notre algorithme apprend vos préférences et crée des combinaisons harmonieuses que vous n'auriez pas imaginées.</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-number">04</div>
+      <div class="fc-icon">🔔</div>
+      <div class="fc-title">Notifications quotidiennes</div>
+      <p class="fc-desc">Recevez chaque matin votre suggestion de tenue avant même de vous lever. Gagnez du temps dès le réveil.</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-number">05</div>
+      <div class="fc-icon">📊</div>
+      <div class="fc-title">Statistiques d'usage</div>
+      <p class="fc-desc">Découvrez quels vêtements vous portez le plus, et optimisez vos achats futurs grâce à des données concrètes.</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-number">06</div>
+      <div class="fc-icon">🔒</div>
+      <div class="fc-title">Confidentialité totale</div>
+      <p class="fc-desc">Vos données et votre garde-robe vous appartiennent. Sécurité et confidentialité garanties à chaque étape.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-how">
+  <div class="how-left">
+    <div class="section-tag">Comment ça marche</div>
+    <h2 class="how-title">Simple, <em>rapide</em><br>et intelligent.</h2>
+    <p class="how-desc">En quelques étapes, SmartDress devient votre assistant vestimentaire personnel au quotidien.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Créez votre compte</div>
+          <div class="step-desc">Inscription rapide et sécurisée. Votre profil de style est configuré en 2 minutes.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Ajoutez vos vêtements</div>
+          <div class="step-desc">Photographiez ou catégorisez chaque pièce de votre garde-robe facilement.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Recevez vos suggestions</div>
+          <div class="step-desc">Chaque matin, une tenue adaptée à la météo et à vos goûts vous attend.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Affinez votre style</div>
+          <div class="step-desc">Notez les suggestions, l'IA apprend et s'améliore à chaque interaction.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="how-right">
+    <div class="phone-frame">
+      <div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="phone-header">
+        <div class="ph-title">Bonjour Yasmine 👋</div>
+        <div class="ph-date">Mardi 3 Mars · Casablanca</div>
+      </div>
+      <div class="phone-weather-bar">
+        <div><div class="pwb-temp">18°C</div><div class="pwb-label">Partiellement nuageux</div></div>
+        <div class="pwb-icon">⛅</div>
+      </div>
+      <div class="outfit-suggestion">
+        <div class="os-label">✨ Tenue suggérée</div>
+        <div class="os-title">Casual Chic — Automne</div>
+      </div>
+      <div class="outfit-items">
+        <div class="oi oi-1"></div>
+        <div class="oi oi-2"></div>
+        <div class="oi oi-3"></div>
+      </div>
+      <div class="wardrobe-grid-phone">
+        <div class="wgp-item"><span class="wgp-num">24</span>Hauts</div>
+        <div class="wgp-item"><span class="wgp-num">12</span>Pantalons</div>
+        <div class="wgp-item"><span class="wgp-num">8</span>Robes</div>
+        <div class="wgp-item"><span class="wgp-num">15</span>Chaussures</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-cta">
+  <div class="section-tag" style="justify-content:center;margin-bottom:8px;">Rejoignez SmartDress</div>
+  <h2 class="cta-title">
+    Fini le stress du matin.<br>
+    Commencez à vous habiller avec <em>intelligence</em>.
+  </h2>
+  <p class="cta-desc">Rejoignez des milliers d'utilisateurs qui ont transformé leur routine matinale grâce à SmartDress.</p>
+  <div class="cta-actions">
+    <a href="#" class="btn-primary">Créer un compte gratuit</a>
+    <a href="#" class="btn-ghost">En savoir plus</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">
+    <a href="#" class="logo">Smart<span>Dress</span></a>
+    <p class="footer-tagline">Votre garde-robe digitale intelligente. Suggestions de tenues basées sur la météo et vos préférences personnelles.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Application</h4>
+    <ul>
+      <li><a href="#">Fonctionnalités</a></li>
+      <li><a href="#">Garde-robe</a></li>
+      <li><a href="#">Suggestions</a></li>
+      <li><a href="#">Notifications</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Compte</h4>
+    <ul>
+      <li><a href="#">S'inscrire</a></li>
+      <li><a href="#">Se connecter</a></li>
+      <li><a href="#">Mon profil</a></li>
+      <li><a href="#">Paramètres</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Projet</h4>
+    <ul>
+      <li><a href="#">À propos</a></li>
+      <li><a href="#">Rapport PFF</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Mentions légales</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <span>© 2025–2026 SmartDress · Yasmine Haddad</span>
+  <span>Formation Développement Mobile · Mode Bootcamp</span>
+</div>
+
+</body>
+</html>
